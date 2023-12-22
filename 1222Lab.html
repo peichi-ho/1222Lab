@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dice Roller</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dice Roller</h1>
+  <button id="rollButton">Roll 12 Dice</button>
+  <div id="diceContainer"></div>
+  <h2>Frequency Table</h2>
+  <table id="frequencyTable">
+    <tr>
+      <th>Face</th>
+      <th>Count</th>
+      <th>Probability</th>
+    </tr>
+  </table>
+
+  <script>
+    window.addEventListener("load", start, false);
+
+    function start() {
+      var button = document.getElementById("rollButton");
+      button.addEventListener("click", rollDice, false);
+    }
+
+    function rollDice() {
+      var diceContainer = document.getElementById("diceContainer");
+      diceContainer.innerHTML = '';
+
+      // Array to store the count of each face
+      var faceCount = [0, 0, 0, 0, 0, 0];
+
+      // Roll 12 dice
+      for (var i = 0; i < 12; i++) {
+        var dieNumber = i + 1;
+        var face = Math.floor(Math.random() * 6) + 1;
+        setImage(dieNumber, face);
+        faceCount[face - 1]++;
+      }
+
+      // Update the frequency table
+      updateFrequencyTable(faceCount);
+    }
+
+    function setImage(dieNumber, face) {
+      var diceContainer = document.getElementById("diceContainer");
+      var img = document.createElement("img");
+      img.src = "die" + face + ".png"; // You need to have dice images with filenames like dice_face_1.png, dice_face_2.png, etc.
+      img.alt = "Die " + dieNumber;
+      diceContainer.appendChild(img);
+    }
+
+    function updateFrequencyTable(faceCount) {
+      var table = document.getElementById("frequencyTable");
+      table.innerHTML = '<tr><th>Face</th><th>Count</th><th>Probability</th></tr>';
+
+      for (var i = 0; i < 6; i++) {
+        var face = i + 1;
+        var count = faceCount[i];
+        var probability = count / 12 * 100; // Calculate probability as a percentage
+        probability = probability.toFixed(2); // Round to 2 decimal places
+
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+
+        cell1.textContent = face;
+        cell2.textContent = count;
+        cell3.textContent = probability + "%";
+      }
+    }
+  </script>
+</body>
+</html>
